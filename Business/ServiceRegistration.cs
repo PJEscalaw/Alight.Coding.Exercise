@@ -1,4 +1,5 @@
 ﻿using Business.Behaviors;
+using Business.Commons.Helpers;
 using FluentValidation;
 using Mapster;
 using MapsterMapper;
@@ -18,6 +19,7 @@ public static class ServiceRegistration
         _ = services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         _ = services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
         _ = services.AddSingleton(Log.Logger);
+        _ = services.AddTransient<IValidationHelper, ValidationHelper>();
         var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
         typeAdapterConfig.Scan(Assembly.GetExecutingAssembly());
         var mapperConfig = new Mapper(typeAdapterConfig);

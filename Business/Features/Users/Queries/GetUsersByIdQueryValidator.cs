@@ -1,31 +1,23 @@
-﻿using FluentValidation;
-using Persistence.UnitOfWork;
-using SQLitePCL;
+﻿using Business.Commons.Helpers;
+using FluentValidation;
 
 namespace Business.Features.Users.Queries;
 
 public class GetUsersByIdQueryValidator : AbstractValidator<GetUsersByIdQuery>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidationHelper _validationHelper;
 
-    public GetUsersByIdQueryValidator(IUnitOfWork unitOfWork)
+    public GetUsersByIdQueryValidator(IValidationHelper validationHelper)
     {
-        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-
+        _validationHelper = validationHelper ?? throw new ArgumentNullException(nameof(validationHelper));
+        
         _ = RuleFor(x => x.Id)
             .NotEmpty()
             .NotNull()
             .WithMessage("Id must not be empty.")
             .NotEqual(0)
             .WithMessage("Id must not be equals zero.")
-            .MustAsync(ExistsAsync)
+            .MustAsync(_validationHelper.UserExistsAsync)
             .WithMessage("User id {PropertyValue} not found.");
-    }
-
-    public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken)
-    {
-        var user = await _unitOfWork.UsersRepository.GetByIdAsync(id);
-
-        return user != null;
     }
 }

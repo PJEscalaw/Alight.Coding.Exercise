@@ -1,4 +1,4 @@
-﻿using Business.Commons;
+﻿using Business.Commons.Exceptions;
 using FluentValidation;
 using MediatR;
 using System.Net;

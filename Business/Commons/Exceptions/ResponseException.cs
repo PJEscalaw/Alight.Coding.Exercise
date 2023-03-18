@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Runtime.Serialization;
 
-namespace Business.Commons;
+namespace Business.Commons.Exceptions;
 
 [Serializable]
 public sealed class ResponseException : Exception

@@ -3,15 +3,15 @@ using FluentValidation;
 
 namespace Business.Features.Users.Commands;
 
-public class CreateUsersCommandValidator : AbstractValidator<CreateUsersCommand>
+public class UpdateUsersCommandValidator : AbstractValidator<UpdateUsersCommand>
 {
     private readonly IValidationHelper _validationHelper;
 
-    public CreateUsersCommandValidator(IValidationHelper validationHelper)
+    public UpdateUsersCommandValidator(IValidationHelper validationHelper)
     {
         _validationHelper = validationHelper ?? throw new ArgumentNullException(nameof(validationHelper));
-        
-        _ = RuleFor(x => x.UsersInputDto.FirstName)
+   
+     _ = RuleFor(x => x.UsersInputDto.FirstName)
             .NotNull()
             .NotEmpty();
 
@@ -35,6 +35,13 @@ public class CreateUsersCommandValidator : AbstractValidator<CreateUsersCommand>
         _ = RuleFor(x => x.UsersInputDto.Email)
            .MustAsync(_validationHelper.EmailNotExistsAsync)
            .WithMessage("Email '{PropertyValue}' already used.");
+
+        _ = RuleFor(x => x.UsersInputDto.UserId)
+            .NotEmpty()
+            .NotNull()
+            .NotEqual(0)
+            .MustAsync(_validationHelper.UserExistsAsync)
+            .WithMessage("User id '{PropertyValue}' not found.");
 
         ValidateAddress();
         ValidateEmployments();

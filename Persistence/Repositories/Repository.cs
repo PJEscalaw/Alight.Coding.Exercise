@@ -15,4 +15,5 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     public async Task<IEnumerable<TEntity>> GetAllAsync() => await Task.FromResult(_entities.AsEnumerable());
     public virtual async Task<TEntity> GetByIdAsync(int id) => await _entities.FindAsync(id);
     public async Task UpdateAsync(TEntity entity) => await Task.CompletedTask;
+    public void UpdateRange(IEnumerable<TEntity> entities) => _entities.UpdateRange(entities);
 }
