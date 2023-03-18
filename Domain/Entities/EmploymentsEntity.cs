@@ -1,8 +1,8 @@
-﻿namespace Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-/// <summary>
-/// Entity for Employments.
-/// </summary>
+namespace Domain.Entities;
+
+[Table("Employments")]
 public class EmploymentsEntity
 {
     public int Id { get; set; }

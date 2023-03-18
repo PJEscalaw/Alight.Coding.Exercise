@@ -1,12 +1,13 @@
-﻿namespace Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-/// <summary>
-/// Entity for Addresses.
-/// </summary>
+namespace Domain.Entities;
+
+[Table("Addresses")]
 public class AddressesEntity
 {
     public int Id { get; set; }
-    public string Street { get; set; } //MANDATORY        
-    public string City { get; set; } //MANDATORY
+    public int UserId { get; set; }
+    public string Street { get; set; }       
+    public string City { get; set; }
     public int? PostCode { get; set; }
 }
