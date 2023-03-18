@@ -2,4 +2,7 @@
 
 namespace Persistence.Repositories.Interfaces;
 
-public interface IAddressesRepository : IRepository<AddressesEntity> { }
+public interface IAddressesRepository : IRepository<AddressesEntity> 
+{
+    Task<AddressesEntity?> GetAddressesByUserIdAsync(int userId);
+}

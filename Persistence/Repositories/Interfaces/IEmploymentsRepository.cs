@@ -2,4 +2,7 @@
 
 namespace Persistence.Repositories.Interfaces;
 
-public interface IEmploymentsRepository : IRepository<EmploymentsEntity> { }
+public interface IEmploymentsRepository : IRepository<EmploymentsEntity> 
+{
+    Task<IEnumerable<EmploymentsEntity>> GetEmploymentsByUserId(int userId);
+}
