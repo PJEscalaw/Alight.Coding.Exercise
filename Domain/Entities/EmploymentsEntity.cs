@@ -6,6 +6,7 @@
 public class EmploymentsEntity
 {
     public int Id { get; set; }
+    public int UserId { get; set; }
     public string Company { get; set; }
     public uint MonthsOfExperience { get; set; } //MANDATORY
     public uint Salary { get; set; } //MANDATORY

@@ -13,7 +13,7 @@ public static class ServiceRegistration
         if (string.IsNullOrEmpty(connectionString)) throw new Exception("No connection string found.");
 
         string dbPath = AppDomain.CurrentDomain.BaseDirectory;
-        _ = connectionString.Replace("{dbPath}", dbPath);
+        connectionString = connectionString.Replace("{dbPath}", dbPath);
 
         services.AddDbContext<AppDbContext>(options => options
                 .UseSqlite(connectionString));

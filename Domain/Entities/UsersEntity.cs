@@ -10,5 +10,4 @@ public class UsersEntity
     public string LastName { get; set; } //MANDATORY
     public string Email { get; set; } //MANDATORY, UNIQUE
     public int AddressId { get; set; }
-    public IEnumerable<int> EmploymentIds { get; set; }
 }
