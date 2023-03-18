@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 using Persistence.Repositories.Interfaces;
 
@@ -16,5 +17,6 @@ public class EmploymentRepository : Repository<EmploymentsEntity>, IEmploymentsR
     public async Task<IEnumerable<EmploymentsEntity>> GetEmploymentsByUserId(int userId) 
         => await Task.FromResult(_context.Employments
             .Where(x => x.UserId == userId)
+            .AsNoTracking()
             .AsEnumerable());
 }

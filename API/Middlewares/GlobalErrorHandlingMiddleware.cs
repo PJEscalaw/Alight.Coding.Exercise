@@ -1,4 +1,4 @@
-﻿using Business.Commons;
+﻿using Business.Commons.Exceptions;
 using Serilog;
 using System.Net;
 using System.Text.Json;

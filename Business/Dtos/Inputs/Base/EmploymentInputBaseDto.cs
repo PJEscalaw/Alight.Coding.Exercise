@@ -1,6 +1,6 @@
-﻿namespace Business.Dtos.Inputs;
+﻿namespace Business.Dtos.Inputs.Base;
 
-public class EmploymentsInputDto
+public class EmploymentInputBaseDto
 {
     public string Company { get; set; }
     public int? MonthsOfExperience { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Business.Dtos.Inputs;
+using Business.Dtos.Inputs.Base;
 using Domain.Entities;
 using MapsterMapper;
 using MediatR;
@@ -9,7 +10,7 @@ namespace Business.Features.Users.Commands;
 
 public class CreateUsersCommand : IRequest<int>
 {
-    public UsersInputDto UsersInputDto { get; set; }
+    public CreateUsersInputDto UsersInputDto { get; set; }
 }
 
 public class CreateUsersCommandHandler : IRequestHandler<CreateUsersCommand, int>
@@ -18,7 +19,10 @@ public class CreateUsersCommandHandler : IRequestHandler<CreateUsersCommand, int
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
 
-    public CreateUsersCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
+    public CreateUsersCommandHandler(
+        IUnitOfWork unitOfWork, 
+        IMapper mapper, 
+        ILogger logger)
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -45,7 +49,7 @@ public class CreateUsersCommandHandler : IRequestHandler<CreateUsersCommand, int
         }
     }
 
-    private async Task PersistEmploymentsAsync(IEnumerable<EmploymentsInputDto> employmentsInputDtos, int userId)
+    private async Task PersistEmploymentsAsync(IEnumerable<CreateEmploymentsInputDto> employmentsInputDtos, int userId)
     {
         var employmentsToCreate = _mapper.Map<List<EmploymentsEntity>>(employmentsInputDtos);
         employmentsToCreate.ForEach(employment => employment.UserId = userId);
@@ -59,7 +63,7 @@ public class CreateUsersCommandHandler : IRequestHandler<CreateUsersCommand, int
         await _unitOfWork.AddressesRepository.AddAsync(addressToCreate);
     }
 
-    private async Task<UsersEntity> PeristUserAsync(UsersInputDto usersInputDto)
+    private async Task<UsersEntity> PeristUserAsync(UsersInputBaseDto usersInputDto)
     {
         var userToCreate = _mapper.Map<UsersEntity>(usersInputDto);
         await _unitOfWork.UsersRepository.AddAsync(userToCreate);

@@ -1,4 +1,5 @@
 ﻿using Business.Dtos.Inputs;
+using Business.Dtos.Inputs.Base;
 using Domain.Entities;
 using Mapster;
 
@@ -8,8 +9,8 @@ internal class CreateUsersCommandMapper : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<UsersInputDto, UsersEntity>();
+        config.NewConfig<UsersInputBaseDto, UsersEntity>();
         config.NewConfig<AddressesInputDto, AddressesEntity>();
-        config.NewConfig<EmploymentsInputDto, EmploymentsEntity>();
+        config.NewConfig<CreateEmploymentsInputDto, EmploymentsEntity>();
     }
 }
