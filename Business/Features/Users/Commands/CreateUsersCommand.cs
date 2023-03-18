@@ -28,16 +28,9 @@ public class CreateUsersCommandHandler : IRequestHandler<CreateUsersCommand, int
     {
         try
         {
-            var userToCreate = _mapper.Map<UsersEntity>(request.UsersInputDto);
-            await _unitOfWork.UsersRepository.AddAsync(userToCreate);
-
-            var addressToCreate = _mapper.Map<AddressesEntity>(request.UsersInputDto.Address);
-            addressToCreate.UserId = userToCreate.Id;
-            await _unitOfWork.AddressesRepository.AddAsync(addressToCreate);
-
-            var employmentsToCreate = _mapper.Map<List<EmploymentsEntity>>(request.UsersInputDto.Employments);
-            employmentsToCreate.ForEach(employment => employment.UserId = userToCreate.Id);
-            await _unitOfWork.EmploymentsRepository.AddRangeAsync(employmentsToCreate);
+            var userToCreate = await PeristUserAsync(request.UsersInputDto);
+            await PersistAddressAsync(request.UsersInputDto.Address, userToCreate.Id);
+            await PersistEmploymentsAsync(request.UsersInputDto.Employments, userToCreate.Id);
 
             _ = await _unitOfWork.CommitAsync();
 
@@ -50,5 +43,28 @@ public class CreateUsersCommandHandler : IRequestHandler<CreateUsersCommand, int
 
             throw;
         }
+    }
+
+    private async Task PersistEmploymentsAsync(IEnumerable<EmploymentsInputDto> employmentsInputDtos, int userId)
+    {
+        var employmentsToCreate = _mapper.Map<List<EmploymentsEntity>>(employmentsInputDtos);
+        employmentsToCreate.ForEach(employment => employment.UserId = userId);
+        await _unitOfWork.EmploymentsRepository.AddRangeAsync(employmentsToCreate);
+    }
+
+    private async Task PersistAddressAsync(AddressesInputDto addressesInputDto, int userId)
+    {
+        var addressToCreate = _mapper.Map<AddressesEntity>(addressesInputDto);
+        addressToCreate.UserId = userId;
+        await _unitOfWork.AddressesRepository.AddAsync(addressToCreate);
+    }
+
+    private async Task<UsersEntity> PeristUserAsync(UsersInputDto usersInputDto)
+    {
+        var userToCreate = _mapper.Map<UsersEntity>(usersInputDto);
+        await _unitOfWork.UsersRepository.AddAsync(userToCreate);
+
+        _ = await _unitOfWork.CommitAsync();
+        return userToCreate;
     }
 }
