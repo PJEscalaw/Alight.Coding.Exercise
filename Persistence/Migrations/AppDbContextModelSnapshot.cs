@@ -32,6 +32,9 @@ namespace Persistence.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("Addresses");
@@ -70,9 +73,6 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AddressId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")

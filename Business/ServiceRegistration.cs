@@ -1,5 +1,7 @@
 ﻿using Business.Behaviors;
 using FluentValidation;
+using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -16,5 +18,9 @@ public static class ServiceRegistration
         _ = services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         _ = services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
         _ = services.AddSingleton(Log.Logger);
+        var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
+        typeAdapterConfig.Scan(Assembly.GetExecutingAssembly());
+        var mapperConfig = new Mapper(typeAdapterConfig);
+        services.AddSingleton<IMapper>(mapperConfig);
     }
 }

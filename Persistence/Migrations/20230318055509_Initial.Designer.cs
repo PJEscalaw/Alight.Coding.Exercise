@@ -11,7 +11,7 @@ using Persistence.Contexts;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230318015721_Initial")]
+    [Migration("20230318055509_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -34,6 +34,9 @@ namespace Persistence.Migrations
 
                     b.Property<string>("Street")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -73,9 +76,6 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AddressId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
