@@ -13,7 +13,7 @@ public static class ServiceRegistration
         var connectionString = configuration["ConnectionStrings:DefaultConnection"];
         if (string.IsNullOrEmpty(connectionString)) throw new Exception("No connection string found.");
 
-        string dbPath = AppDomain.CurrentDomain.BaseDirectory;
+        var dbPath = AppDomain.CurrentDomain.BaseDirectory;
         connectionString = connectionString.Replace("{dbPath}", dbPath);
 
         services.AddDbContext<AppDbContext>(options => options
