@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
+using Persistence.UnitOfWork;
 
 namespace Persistence;
 
@@ -17,5 +18,7 @@ public static class ServiceRegistration
 
         services.AddDbContext<AppDbContext>(options => options
                 .UseSqlite(connectionString));
+
+        _ = services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
     }
 }
