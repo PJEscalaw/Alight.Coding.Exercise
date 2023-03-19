@@ -42,8 +42,7 @@ public class GlobalErrorHandlingMiddleware
 
     private static string ReturnInternalServerResponse(Exception error)
     {
-        if (error is null)
-            throw new ArgumentNullException(nameof(error));
+        if (error is null) throw new ArgumentNullException(nameof(error));
 
         var logError = JsonSerializer.Serialize(new
         {
