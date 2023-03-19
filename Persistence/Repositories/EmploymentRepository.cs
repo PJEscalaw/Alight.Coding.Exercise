@@ -14,9 +14,9 @@ public class EmploymentRepository : Repository<EmploymentsEntity>, IEmploymentsR
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<IEnumerable<EmploymentsEntity>> GetEmploymentsByUserId(int userId) 
-        => await Task.FromResult(_context.Employments
-            .Where(x => x.UserId == userId)
-            .AsNoTracking()
-            .AsEnumerable());
+    public async Task<EmploymentsEntity?> GetEmploymentsByIdAndUserIdAsync(int id, int userId) 
+        => await _context.Employments.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+
+    public async Task<IEnumerable<EmploymentsEntity?>> GetEmploymentsByUserIdAsync(int userId) 
+        => await Task.FromResult(_context.Employments.Where(x => x.UserId == userId).AsEnumerable());
 }
