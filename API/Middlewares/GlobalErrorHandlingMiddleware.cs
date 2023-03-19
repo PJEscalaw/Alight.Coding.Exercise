@@ -30,15 +30,24 @@ public class GlobalErrorHandlingMiddleware
             error.Succeeded,
             error.Message,
             error.Errors
-        });
+        }, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
     private static string ReturnNotFoundResponse(NotFoundException error)
-      => JsonSerializer.Serialize(new
-      {
-          error.StatusCode,
-          error.Succeeded,
-          error.Message,
-      });
+    {
+        var statusCode = 404;
+        var errors = new Dictionary<string, string>
+        {
+            { "message", error.Message }
+        };
+        var message = "Validation errors occurred.";
+        return JsonSerializer.Serialize(new
+        {
+            statusCode,
+            error.Succeeded,
+            message,
+            errors
+        }, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+    }
 
     private static string ReturnInternalServerResponse(Exception error)
     {
@@ -60,7 +69,7 @@ public class GlobalErrorHandlingMiddleware
             StatusCode = (int)HttpStatusCode.InternalServerError,
             Message = "The API has encountered an Internal Server Error. Please try again.",
             ErrorDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff")
-        });
+        },  new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
     }
 
     private static async Task HandleExceptionAsync(HttpContext context, Exception ex)

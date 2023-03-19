@@ -1,6 +1,7 @@
 ﻿using Business.Commons.Exceptions;
 using FluentValidation;
 using MediatR;
+using Shared.Extensions;
 using System.Net;
 
 namespace Business.Behaviors;
@@ -22,8 +23,8 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
 
         var errors = new Dictionary<string, string>();
         foreach (var error in failures)
-            errors.Add(string.IsNullOrEmpty(error.PropertyName) ? "Error" : error.PropertyName, error.ErrorMessage);
+            errors.Add(string.IsNullOrEmpty(error.PropertyName.RemoveInputDto().ToLower()) ? "Error" : error.PropertyName.RemoveInputDto().ToLower(), error.ErrorMessage);
 
-        throw new BadRequestException((HttpStatusCode)(int)HttpStatusCode.BadRequest, "Validation errors occurred", errors);
+        throw new BadRequestException((HttpStatusCode)(int)HttpStatusCode.BadRequest, "Validation errors occurred.", errors);
     }
 }

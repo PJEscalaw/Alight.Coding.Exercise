@@ -15,8 +15,8 @@ public sealed class NotFoundException : Exception
         Errors = errors;
     }
 
-    public int StatusCode { get; set; } = 404;
-    public bool Succeeded { get; set; } 
+    public int StatusCode { get; set; }
+    public bool Succeeded { get; set; }
     public string Message { get; set; }
     public object Errors { get; set; }
 }

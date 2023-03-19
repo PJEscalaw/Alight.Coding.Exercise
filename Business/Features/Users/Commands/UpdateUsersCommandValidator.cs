@@ -75,8 +75,8 @@ public class UpdateUsersCommandValidator : AbstractValidator<UpdateUsersCommand>
                             .NotEmpty()
                             .NotNull();
 
-                    _ = employment.RuleFor(x => x.EndDate.Value.Date)
-                            .GreaterThan(x => x.StartDate.Value.Date)
+                    _ = employment.RuleFor(x => x.EndDate)
+                            .GreaterThan(x => x.StartDate)
                             .WithMessage("End Date {PropertyValue} must be greater than Start Date.");
                 });
     }
