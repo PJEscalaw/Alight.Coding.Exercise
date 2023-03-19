@@ -23,13 +23,22 @@ public class GlobalErrorHandlingMiddleware
         }
     }
 
-    private static string ReturnBadRequestResponse(ErrorException error)
+    private static string ReturnBadRequestResponse(BadRequestException error)
         => JsonSerializer.Serialize(new
         {
             error.StatusCode,
             error.Succeeded,
             error.Message,
+            error.Errors
         });
+
+    private static string ReturnNotFoundResponse(NotFoundException error)
+      => JsonSerializer.Serialize(new
+      {
+          error.StatusCode,
+          error.Succeeded,
+          error.Message,
+      });
 
     private static string ReturnInternalServerResponse(Exception error)
     {
@@ -38,10 +47,10 @@ public class GlobalErrorHandlingMiddleware
 
         var logError = JsonSerializer.Serialize(new
         {
-            ErrorMessage = error.Message,
+            error.Message,
             error.StackTrace,
             error.Source,
-            InnerException = error.InnerException == null ? "" : error.InnerException.Message,
+            InnerException = (error.InnerException == null ? "" : error.InnerException.Message),
             DateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff")
         });
 
@@ -61,9 +70,13 @@ public class GlobalErrorHandlingMiddleware
 
         switch (ex)
         {
-            case ErrorException e:
+            case BadRequestException e:
                 context.Response.StatusCode = e.StatusCode;
                 await context.Response.WriteAsync(ReturnBadRequestResponse(e));
+                break;
+            case NotFoundException e:
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
+                await context.Response.WriteAsync(ReturnNotFoundResponse(e));
                 break;
             case Exception e:
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

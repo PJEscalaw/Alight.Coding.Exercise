@@ -4,25 +4,26 @@ using System.Runtime.Serialization;
 namespace Business.Commons.Exceptions;
 
 [Serializable]
-public sealed class ErrorException : Exception
+public sealed class BadRequestException : Exception
 {
-    public ErrorException()
+    public BadRequestException()
     {
+
     }
 
-    public ErrorException(string message)
+    public BadRequestException(string message)
     {
         StatusCode = (int)HttpStatusCode.BadRequest;
         Message = message;
     }
 
-    public ErrorException(HttpStatusCode httpStatusCode, string message)
+    public BadRequestException(HttpStatusCode httpStatusCode, string message)
     {
         StatusCode = (int)httpStatusCode;
         Message = message;
     }
 
-    public ErrorException(HttpStatusCode httpStatusCode, string message, object errors)
+    public BadRequestException(HttpStatusCode httpStatusCode, string message, object errors)
     {
         StatusCode = (int)httpStatusCode;
         Message = message;
@@ -40,7 +41,7 @@ public sealed class ErrorException : Exception
 
     public new object Data { get; set; } = null;
 
-    private ErrorException(SerializationInfo serializationInfo, StreamingContext streamingContext)
+    private BadRequestException(SerializationInfo serializationInfo, StreamingContext streamingContext)
     {
         throw new NotImplementedException();
     }

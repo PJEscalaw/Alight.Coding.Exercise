@@ -1,31 +1,22 @@
-﻿using System.Net;
-using System.Runtime.Serialization;
-
-namespace Business.Commons.Exceptions;
+﻿namespace Business.Commons.Exceptions;
 
 [Serializable]
 public sealed class NotFoundException : Exception
 {
-    public NotFoundException()
+    public NotFoundException(string message)
     {
-
+        Message = message;        
+    }
+    public NotFoundException(int statusCode, bool succeded, string message, object errors)
+    {
+        StatusCode = statusCode;
+        Succeeded = succeded;
+        Message = message;
+        Errors = errors;
     }
 
-    public NotFoundException(string name, string fieldName, object key)
-    {
-        throw new ErrorException(HttpStatusCode.NotFound, $"{fieldName} > ({key}) was not found in [{name}] entity.");
-    }
-
-    private NotFoundException(SerializationInfo info, StreamingContext context)
-    : base(info, context)
-    {
-    }
-
-    public NotFoundException(string? message) : base(message)
-    {
-    }
-
-    public NotFoundException(string? message, Exception? innerException) : base(message, innerException)
-    {
-    }
+    public int StatusCode { get; set; } = 404;
+    public bool Succeeded { get; set; } 
+    public string Message { get; set; }
+    public object Errors { get; set; }
 }

@@ -24,6 +24,6 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
         foreach (var error in failures)
             errors.Add(string.IsNullOrEmpty(error.PropertyName) ? "Error" : error.PropertyName, error.ErrorMessage);
 
-        throw new ErrorException((HttpStatusCode)(int)HttpStatusCode.BadRequest, "Validation errors occurred", errors);
+        throw new BadRequestException((HttpStatusCode)(int)HttpStatusCode.BadRequest, "Validation errors occurred", errors);
     }
 }

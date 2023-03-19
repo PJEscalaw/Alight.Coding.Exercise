@@ -52,7 +52,7 @@ public class UpdateUsersCommandHandler : IRequestHandler<UpdateUsersCommand, int
         foreach (var employment in employments)
         {
             var employmentEntity = await _unitOfWork.EmploymentsRepository.GetEmploymentsByIdAndUserIdAsync(employment.Id, userId) 
-                ?? throw new ErrorException($"No employment found using employment id '{employment.Id}' and userid '{userId}'.");
+                ?? throw new NotFoundException($"No employment found using employment id '{employment.Id}' and userid '{userId}'.");
             employment.Adapt(employmentEntity);
             employmentsToUpdate.Add(employmentEntity);
         }
