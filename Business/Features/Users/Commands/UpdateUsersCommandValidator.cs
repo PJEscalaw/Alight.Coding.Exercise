@@ -11,7 +11,7 @@ public class UpdateUsersCommandValidator : AbstractValidator<UpdateUsersCommand>
     {
         _validationHelper = validationHelper ?? throw new ArgumentNullException(nameof(validationHelper));
    
-     _ = RuleFor(x => x.UsersInputDto.FirstName)
+        _ = RuleFor(x => x.UsersInputDto.FirstName)
             .NotNull()
             .NotEmpty();
 
@@ -52,6 +52,11 @@ public class UpdateUsersCommandValidator : AbstractValidator<UpdateUsersCommand>
         _ = RuleForEach(x => x.UsersInputDto.Employments)
                 .ChildRules(employment =>
                 {
+                    _ = employment.RuleFor(x => x.Id)
+                            .NotEmpty()
+                            .NotNull()
+                            .NotEqual(0);
+
                     _ = employment.RuleFor(x => x.Company)
                             .NotNull()
                             .NotEmpty();

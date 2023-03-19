@@ -3,7 +3,7 @@ using Serilog;
 using System.Net;
 using System.Text.Json;
 
-namespace API.Middlewares;
+namespace Api.Middlewares;
 
 public class GlobalErrorHandlingMiddleware
 {
@@ -23,13 +23,12 @@ public class GlobalErrorHandlingMiddleware
         }
     }
 
-    private static string ReturnBadRequestResponse(ResponseException error)
+    private static string ReturnBadRequestResponse(ErrorException error)
         => JsonSerializer.Serialize(new
         {
             error.StatusCode,
             error.Succeeded,
             error.Message,
-            error.Errors
         });
 
     private static string ReturnInternalServerResponse(Exception error)
@@ -62,7 +61,7 @@ public class GlobalErrorHandlingMiddleware
 
         switch (ex)
         {
-            case ResponseException e:
+            case ErrorException e:
                 context.Response.StatusCode = e.StatusCode;
                 await context.Response.WriteAsync(ReturnBadRequestResponse(e));
                 break;

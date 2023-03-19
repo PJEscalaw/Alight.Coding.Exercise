@@ -1,5 +1,4 @@
 ﻿using Business.Dtos.Outputs;
-using Mapster;
 using MapsterMapper;
 using MediatR;
 using Persistence.UnitOfWork;
@@ -14,11 +13,12 @@ public class GetUsersByIdQuery : IRequest<UsersOutputDto>
 public class GetUsersByIdQueryHander : IRequestHandler<GetUsersByIdQuery, UsersOutputDto>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public GetUsersByIdQueryHander(
-        IUnitOfWork unitOfWork)
+    public GetUsersByIdQueryHander(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
     public async Task<UsersOutputDto> Handle(GetUsersByIdQuery request, CancellationToken cancellationToken)
     {
@@ -26,12 +26,12 @@ public class GetUsersByIdQueryHander : IRequestHandler<GetUsersByIdQuery, UsersO
 
         var userEntity = await _unitOfWork.UsersRepository.GetByIdAsync(request.Id);
         var addressEntity = await _unitOfWork.AddressesRepository.GetAddressesByUserIdAsync(userEntity.Id);
-        var employmentsEntities = await _unitOfWork.EmploymentsRepository.GetEmploymentsByUserId(userEntity.Id);
+        var employmentsEntities = await _unitOfWork.EmploymentsRepository.GetEmploymentsByUserIdAsync(userEntity.Id);
 
-        var userOutputDto = userEntity.Adapt<UsersOutputDto>();
-        userOutputDto.Address = addressEntity.Adapt<AddressesOutputDto>();
-        userOutputDto.Employments = employmentsEntities.Adapt<IEnumerable<EmploymentsOutputDto>>();
+        var user = _mapper.Map<UsersOutputDto>(userEntity);
+        user.Address = _mapper.Map<AddressesOutputDto>(addressEntity);
+        user.Employments = _mapper.Map<IEnumerable<EmploymentsOutputDto>>(employmentsEntities);
 
-        return userOutputDto;
+        return user;
     }
 }

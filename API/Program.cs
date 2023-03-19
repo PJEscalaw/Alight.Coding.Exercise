@@ -1,12 +1,12 @@
+using Api.Middlewares;
+using Business;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Contexts;
-using Business;
 using Serilog;
-using System.Text.Json.Serialization;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http.Json;
-using API.Middlewares;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,4 +1,5 @@
-﻿using Business.Dtos.Inputs;
+﻿using Business.Commons.Exceptions;
+using Business.Dtos.Inputs;
 using Domain.Entities;
 using Mapster;
 using MediatR;
@@ -47,24 +48,26 @@ public class UpdateUsersCommandHandler : IRequestHandler<UpdateUsersCommand, int
 
     private async Task UpdateEmploymentsAsync(IEnumerable<UpdateEmploymentsInputDto> employments, int userId)
     {
-        var employmentsEntities = await _unitOfWork.EmploymentsRepository.GetEmploymentsByUserId(userId);
-        var employmentsToUpdate = employments.Adapt(employmentsEntities);
-        
-        _unitOfWork.EmploymentsRepository.UpdateRange(employmentsToUpdate);
+        var employmentsToUpdate = new List<EmploymentsEntity>();
+        foreach (var employment in employments)
+        {
+            var employmentEntity = await _unitOfWork.EmploymentsRepository.GetEmploymentsByIdAndUserIdAsync(employment.Id, userId) 
+                ?? throw new ErrorException($"No employment found using employment id '{employment.Id}' and userid '{userId}'.");
+            employment.Adapt(employmentEntity);
+            employmentsToUpdate.Add(employmentEntity);
+        }
     }
 
     private async Task UpdateAddressAsync(AddressesInputDto address, int userId)
     {
         var addressEntity = await _unitOfWork.AddressesRepository.GetAddressesByUserIdAsync(userId);
-        var addressToUpdate = address.Adapt(addressEntity);
-        await _unitOfWork.AddressesRepository.UpdateAsync(addressToUpdate);
+        address.Adapt(addressEntity);
     }
 
     private async Task<UsersEntity> UpdateUserAsync(UpdateUsersCommand request)
     {
         var userEntity = await _unitOfWork.UsersRepository.GetByIdAsync(request.UsersInputDto.UserId);
-        var userToUpdate = request.UsersInputDto.Adapt(userEntity);
-        await _unitOfWork.UsersRepository.UpdateAsync(userToUpdate);
+        request.UsersInputDto.Adapt(userEntity);
 
         return userEntity;
     }

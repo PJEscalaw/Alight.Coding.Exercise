@@ -24,5 +24,4 @@ public class ValidationHelper : IValidationHelper
 
         return user == null;
     }
-
 }
