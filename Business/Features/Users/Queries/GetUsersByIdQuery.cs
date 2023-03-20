@@ -10,12 +10,12 @@ public class GetUsersByIdQuery : IRequest<UsersOutputDto>
     public int Id { get; set; }
 }
 
-public class GetUsersByIdQueryHander : IRequestHandler<GetUsersByIdQuery, UsersOutputDto>
+public class GetUsersByIdQueryHandler : IRequestHandler<GetUsersByIdQuery, UsersOutputDto>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public GetUsersByIdQueryHander(IUnitOfWork unitOfWork, IMapper mapper)
+    public GetUsersByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

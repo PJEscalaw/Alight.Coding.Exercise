@@ -58,14 +58,15 @@ public class CreateUsersCommandHandlerTests
             .AddRangeAsync(It.IsAny<IEnumerable<EmploymentsEntity>>()))
             .Returns(Task.CompletedTask);
 
-        _mockUnitOfWork.Setup(x => x
-            .CommitAsync())
+        _mockUnitOfWork.Setup(x => x.CommitAsync())
             .ReturnsAsync(It.IsAny<int>());
 
         //actual
-        var result = await _sut.Handle(TestData.CreateUsersCommand(), new CancellationToken());
+        var result = await _sut.Handle(TestData
+            .CreateUsersCommand(), new CancellationToken());
 
         //assert
-        result.Should().NotBe(0);
+        result.Should()
+            .NotBe(0);
     }
 }

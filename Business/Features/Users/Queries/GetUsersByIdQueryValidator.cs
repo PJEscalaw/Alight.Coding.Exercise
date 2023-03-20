@@ -14,9 +14,7 @@ public class GetUsersByIdQueryValidator : AbstractValidator<GetUsersByIdQuery>
         _ = RuleFor(x => x.Id)
             .NotEmpty()
             .NotNull()
-            .WithMessage("Id must not be empty.")
             .NotEqual(0)
-            .WithMessage("Id must not be equals zero.")
             .MustAsync(_validationHelper.UserExistsAsync)
             .WithMessage("User id {PropertyValue} not found.");
     }
