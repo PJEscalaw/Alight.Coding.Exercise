@@ -36,6 +36,8 @@ GitHub
 ## Design Patterns and Guiding Principles
 ```
 Behavioral Pattern - MediatR
+Repository Pattern
+Unit Of Work
 CQRS
 DRY
 YAGNI
